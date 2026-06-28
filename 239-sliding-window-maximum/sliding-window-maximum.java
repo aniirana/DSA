@@ -1,37 +1,32 @@
 class Solution {
-    public int[] maxSlidingWindow(int[] arr, int k) {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        int[] ans = new int[n - k + 1];
 
         Deque<Integer> dq = new LinkedList<>();
-        int[] list = new int[arr.length - k + 1];
-
-        int s = 0;
-        int e = 0;
         int idx = 0;
 
-        while (e < arr.length) {
+        for (int i = 0; i < n; i++) {
 
-            while (!dq.isEmpty() && arr[dq.peekLast()] <= arr[e]) {
+            // Remove indices that are out of the current window
+            if (!dq.isEmpty() && dq.peekFirst() <= i - k) {
+                dq.pollFirst();
+            }
+
+            // Remove all smaller (or equal) elements from the back
+            while (!dq.isEmpty() && nums[dq.peekLast()] <= nums[i]) {
                 dq.pollLast();
             }
 
-            dq.offerLast(e);
+            // Add current index
+            dq.offerLast(i);
 
-            if (e - s + 1 < k) {
-                e++;
-            }
-            else if (e - s + 1 == k) {
-
-                if (dq.peekFirst() < s) {
-                    dq.pollFirst();
-                }
-
-                list[idx++] = arr[dq.peekFirst()];
-
-                s++;
-                e++;
+            // Store the maximum once the first window is formed
+            if (i >= k - 1) {
+                ans[idx++] = nums[dq.peekFirst()];
             }
         }
 
-        return list;
+        return ans;
     }
 }
