@@ -1,46 +1,41 @@
 class Solution {
     public String reorganizeString(String s) {
-        int[] freq = new int[26];
-
-        for (char ch : s.toCharArray()) {
-            freq[ch - 'a']++;
+        int n=s.length();
+        int[] freq=new int[26];
+        for(int i=0;i<n;i++){
+            char ch=s.charAt(i);
+            freq[ch-'a']++;
         }
-        PriorityQueue<int[]> pq=new PriorityQueue<>((a, b) -> b[1] - a[1]);
 
+        PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->b[1]-a[1]);
         for(int i=0;i<freq.length;i++){
             if(freq[i]>0){
                 pq.offer(new int[]{i,freq[i]});
             }
-
         }
-        StringBuilder ans=new StringBuilder();
+
         int[] prev=null;
+        StringBuilder sb=new StringBuilder();
+        
         while(!pq.isEmpty()){
-            int cur[]=pq.poll();
-            char ch=(char)(cur[0]+'a');
-            
+            int[] curr=pq.poll();
+            char ch=(char)(curr[0]+'a');
+            sb.append(ch);
+            curr[1]--;
 
-            
-               ans.append(ch);
-                
-                cur[1]--;
-                
-                
-            
-
-            if (prev != null && prev[1] > 0) {
+            if(prev!=null && prev[1]>0){
                 pq.offer(prev);
             }
 
-            prev=cur;
+            prev=curr;
 
         }
 
-        if (ans.length() != s.length()) {
+        if(sb.length() != s.length()){
             return "";
         }
 
-        return ans.toString();
+        return sb.toString();
         
     }
 }
