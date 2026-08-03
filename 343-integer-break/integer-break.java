@@ -1,20 +1,16 @@
 class Solution {
     public int integerBreak(int n) {
-        int[] dp=new int[n+1];
-        dp[0]=0;
-        dp[1]=1;
+       if(n==2) return 1;
+       if(n==3) return 2;
 
-        for(int i=2;i<=n;i++){
-            dp[i]=Integer.MIN_VALUE;
-            for(int j=1;j<i;j++){
-                int left=Math.max(j,dp[j]);
-                int right=Math.max(i-j,dp[i-j]);
-                int ans=left*right;
-                dp[i]=Math.max(dp[i],ans);
-            }
-        }
+        int prod=1;
+       while(n>4){
+        prod*=3;
+        n-=3;
+       } 
 
-        return dp[n];
-        
+       prod*=n;
+
+       return prod;
     }
 }
