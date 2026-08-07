@@ -1,59 +1,42 @@
 class Solution {
     public String minWindow(String s, String t) {
+        //freq array method will be used here 
+        int m = s.length();
+        int n = t.length();
+        int[] freq = new int[128];
 
-        HashMap<Character, Integer> need = new HashMap<>();
-
-        // Store frequency of characters in t
-        for (char c : t.toCharArray()) {
-            need.put(c, need.getOrDefault(c, 0) + 1);
+        for (int i = 0; i < n; i++) {
+            char ch = t.charAt(i);
+            freq[ch]++;
         }
-
         int left = 0;
-        int count = t.length();
+        int count = n;
+        int start=0;
+        int len = Integer.MAX_VALUE;
+        for (int i = 0; i < m; i++) {
+            char ch = s.charAt(i);
 
-        int minLen = Integer.MAX_VALUE;
-        int start = 0;
-
-        for (int right = 0; right < s.length(); right++) {
-
-            char ch = s.charAt(right);
-
-            // If this character is needed
-            if (need.containsKey(ch)) {
-
-                if (need.get(ch) > 0) {
-                    count--;
-                }
-
-                need.put(ch, need.get(ch) - 1);
+            if(freq[ch]>0){
+                count--;
             }
+            freq[ch]--;
 
-            // All characters found
-            while (count == 0) {
-
-                if (right - left + 1 < minLen) {
-                    minLen = right - left + 1;
-                    start = left;
+            while(count==0){
+                if(i-left+1<len){
+                    len=i-left+1;
+                    start=left;
                 }
 
-                char leftChar = s.charAt(left);
+                char lchar=s.charAt(left);
+                freq[lchar]++;
+                if(freq[lchar]>0){
 
-                if (need.containsKey(leftChar)) {
-
-                    need.put(leftChar, need.get(leftChar) + 1);
-
-                    // We now miss one required character
-                    if (need.get(leftChar) > 0) {
-                        count++;
-                    }
+                    count++;
                 }
-
                 left++;
             }
         }
 
-        return minLen == Integer.MAX_VALUE
-                ? ""
-                : s.substring(start, start + minLen);
+        return len==Integer.MAX_VALUE?"":s.substring(start,start+len);
     }
 }
