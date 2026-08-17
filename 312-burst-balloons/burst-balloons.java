@@ -12,23 +12,25 @@ class Solution {
         for(int gap=0;gap<nums.length;gap++){
             for(int i=1,j=i+gap;j<=nums.length;i++,j++){
                 if(gap==0){
-                    dp[i][j]=arr[i-1]*arr[i]*arr[i+1];
-                    continue;
-                }
 
-                for(int k=i;k<=j;k++){
+                }
+                dp[i][j]=Integer.MIN_VALUE;
+                
+                for(int k=i;k<j+1;k++){
                     int left=0;
                     int right=0;
                     if(k!=i){
                         left=dp[i][k-1];
-                    }
-                    if(k!=j){
+                    }if(k!=j){
                         right=dp[k+1][j];
                     }
-                    dp[i][j]=Math.max(dp[i][j],left+right+(arr[i-1]*arr[k]*arr[j+1]));
+                    dp[i][j]=Math.max(dp[i][j],left+right+arr[i-1]*arr[k]*arr[j+1]);
+                    
+
                 }
             }
         }
+
         return dp[1][nums.length];
     }
 
