@@ -1,43 +1,26 @@
 class Solution {
-    public int totalFruit(int[] fruits) {
-        // brute force 
-    //    int ans=0;
-    //    for(int i=0;i<fruits.length;i++){
-    //         HashSet<Integer> set=new HashSet<>();
+    public int totalFruit(int[] nums) {
+        HashMap<Integer,Integer> map=new HashMap<>();
 
-    //         for(int j=i;j<fruits.length;j++){
-    //             set.add(fruits[j]);
-    //             if(set.size()>2){
-    //                 break;
-    //             }
-    //             ans=Math.max(ans,j-i+1);
-
-    //         }
         
-    //    }
-    //    return ans;
+        int ans=Integer.MIN_VALUE;
+        int left=0;
 
-    HashMap<Integer,Integer> map=new HashMap<>();
-    int left=0;
-    int max=0;
-    int n=fruits.length;
+        for(int i=0;i<nums.length;i++){
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
 
-    for(int right=0;right<n;right++){
-        map.put(fruits[right],map.getOrDefault(fruits[right],0)+1);
+            while(map.size()>2){
+                map.put(nums[left],map.get(nums[left])-1);
 
-        while(map.size()>2){
-            map.put(fruits[left],map.get(fruits[left])-1);
-
-            if(map.get(fruits[left])==0){
-                map.remove(fruits[left]);
+                if(map.get(nums[left])==0){
+                    map.remove(nums[left]);
+                    
+                }
+                left++;
             }
-            left++;
+            
+            ans=Math.max(ans,i-left+1);
         }
-        max=Math.max(max,right-left+1);
-    }
-
-    return max;
-
-
+        return ans;
     }
 }
